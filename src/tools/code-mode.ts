@@ -23,6 +23,8 @@ export function registerCodeMode(
 
     const executeTool = createExecuteTool({
         prefix: "mgnify",
+        // Verifiable provenance: mgnify_execute results carry a _meta.citation.
+        source: { id: "mgnify", name: "MGnify", url: "https://www.ebi.ac.uk/metagenomics" },
         catalog: mgnifyCatalog,
         apiFetch,
         doNamespace: env.MGNIFY_DATA_DO,
