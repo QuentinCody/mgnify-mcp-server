@@ -14,7 +14,11 @@ export const mgnifyCatalog: ApiCatalog = {
         "- Pagination via `page` and `page_size` params; default page_size is 25.\n" +
         "- Narrow queries by study accession (MGYS*), sample accession (SRS*/ERS*/MGYSS*), or biome slug.\n" +
         "- Biome slugs use colons as path separators: e.g. `root:Host-associated:Human:Digestive%20system`.\n" +
-        "- Docs: https://www.ebi.ac.uk/metagenomics/api/docs/ — OpenAPI: /api/v1/schema/?format=openapi",
+        "- Docs: https://www.ebi.ac.uk/metagenomics/api/docs/ — OpenAPI: /api/v1/schema/?format=openapi\n" +
+        "- GOTCHA: a study re-run through a newer analysis pipeline version keeps ALL prior-version analyses\n" +
+        "  in `/studies/{accession}/analyses` — mixing versions silently double-counts or skews taxonomy/\n" +
+        "  functional aggregates. Always filter to one `pipeline_version` (e.g. `?pipeline_version=5.0`)\n" +
+        "  before aggregating; do not assume the newest analysis is the only one returned.",
     endpoints: [
         // Studies
         {
@@ -58,9 +62,16 @@ export const mgnifyCatalog: ApiCatalog = {
             method: "GET",
             path: "/studies/{accession}/analyses",
             summary: "List analyses performed on a study's runs",
+            description:
+                "Returns analyses from EVERY pipeline version this study has been run through. " +
+                "Filter by `pipeline_version` before aggregating taxonomy/functional results — " +
+                "unfiltered results silently mix e.g. v4.1 and v5.0 outputs for the same samples.",
             category: "studies",
             pathParams: [
                 { name: "accession", type: "string", required: true, description: "Study accession" },
+            ],
+            queryParams: [
+                { name: "pipeline_version", type: "string", required: false, description: "e.g. '5.0' — recommended to avoid mixing analysis versions" },
             ],
         },
 
