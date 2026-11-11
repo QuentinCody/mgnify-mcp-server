@@ -17,7 +17,7 @@ export async function mgnifyFetch(
 ): Promise<Response> {
     const baseUrl = opts?.baseUrl ?? MGNIFY_BASE;
     const headers: Record<string, string> = {
-        Accept: "application/vnd.api+json, application/json",
+        Accept: "application/json",
         ...(opts?.headers ?? {}),
     };
 

@@ -1,15 +1,21 @@
 import type { ApiCatalog } from "@bio-mcp/shared/codemode/catalog";
+import { genomeEndpoints, genomeWorkflows } from "./genomes";
+import { proteinEndpoints, proteinWorkflow } from "./proteins";
 
 export const mgnifyCatalog: ApiCatalog = {
     name: "MGnify",
     baseUrl: "https://www.ebi.ac.uk/metagenomics/api/v1",
     version: "v1",
     auth: "none",
-    endpointCount: 12,
+    endpointCount: 12 + genomeEndpoints.length + proteinEndpoints.length,
+    workflows: [...genomeWorkflows, proteinWorkflow],
     notes:
         "- MGnify is EBI's microbiome resource — metagenomic & metatranscriptomic studies, samples, runs, analyses, biomes.\n" +
+        "- /protein/* uses the separate https://www.ebi.ac.uk/metagenomics/proteins/api/v1 service. It returns {data:native JSON,_mgnify_proteins:source context}, not JSON:API; search has a single filter and capped results with no pagination. Protein database release is not pinned by API v1.\n" +
         "- Responses are JSON:API — records live under `.data[]` and relationships/metadata under `.included[]` and `.meta`.\n" +
-        "  When staging for SQL querying, use `record_path: 'data'` to flatten the JSON:API envelope.\n" +
+        "  Large responses stage automatically. Records are under data; api.getAll uses itemsField:'data', strategy:'page', pageSizeParam:'page_size'.\n" +
+        "- The adapter preserves meta.pagination/links and adds total_count/next for completeness checks. Catalogue version and pipeline tag are independent of retrieval completeness.\n" +
+        "- Genome/catalogue protein files do not imply Atlas MGYP IDs. Preserve release, clustering identity and verified sequence mapping. Bulk archives are external downloads.\n" +
         "- Each item has `id`, `type`, `attributes`, and `relationships` — attributes are the actual metadata.\n" +
         "- Pagination via `page` and `page_size` params; default page_size is 25.\n" +
         "- Narrow queries by study accession (MGYS*), sample accession (SRS*/ERS*/MGYSS*), or biome slug.\n" +
@@ -20,6 +26,8 @@ export const mgnifyCatalog: ApiCatalog = {
         "  functional aggregates. Always filter to one `pipeline_version` (e.g. `?pipeline_version=5.0`)\n" +
         "  before aggregating; do not assume the newest analysis is the only one returned.",
     endpoints: [
+        ...proteinEndpoints,
+        ...genomeEndpoints,
         // Studies
         {
             method: "GET",
@@ -35,7 +43,7 @@ export const mgnifyCatalog: ApiCatalog = {
                 { name: "ordering", type: "string", required: false, description: "Sort field (e.g. '-last_update')" },
             ],
             featured: true,
-            usageHint: "Flatten with record_path: 'data' when staging.",
+            usageHint: "Large responses stage automatically; api.getAll uses itemsField:'data'.",
         },
         {
             method: "GET",
@@ -86,7 +94,7 @@ export const mgnifyCatalog: ApiCatalog = {
                 { name: "biome_name", type: "string", required: false, description: "Filter by biome" },
                 { name: "geo_loc_name", type: "string", required: false, description: "Filter by geographic location" },
             ],
-            usageHint: "Flatten with record_path: 'data' when staging.",
+            usageHint: "Large responses stage automatically; api.getAll uses itemsField:'data'.",
         },
         {
             method: "GET",
@@ -139,7 +147,7 @@ export const mgnifyCatalog: ApiCatalog = {
                 { name: "depth_lte", type: "number", required: false, description: "Max hierarchy depth" },
                 { name: "depth_gte", type: "number", required: false, description: "Min hierarchy depth" },
             ],
-            usageHint: "Flatten with record_path: 'data' when staging.",
+            usageHint: "Large responses stage automatically; api.getAll uses itemsField:'data'.",
         },
         {
             method: "GET",
@@ -161,7 +169,7 @@ export const mgnifyCatalog: ApiCatalog = {
                 { name: "page_size", type: "number", required: false, description: "Items per page", default: 25 },
                 { name: "pubmed_id", type: "string", required: false, description: "Filter by PubMed ID" },
             ],
-            usageHint: "Flatten with record_path: 'data' when staging.",
+            usageHint: "Large responses stage automatically; api.getAll uses itemsField:'data'.",
         },
     ],
 };

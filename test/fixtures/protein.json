@@ -1,0 +1,37 @@
+{
+  "mgyp": "MGYP000261684433",
+  "sequence": "EESGVTRAVQGAGDEVPGEVFFEKGVVEETLRGGPAGEAAAGDTEAATAETDDGHLGSVGRNEKTSFAELKAEYESGDLEWVDDEDRETGPDTGESEHSKTSFADLKAEYESGDLEWVDDEGPDEAAARTTGSGDERTAASVETATTEVVPGEEERTAGEADEGEWDEGEWDGGEGDEETGDLADELDELELFEDEIEWDGDDNTPEESLARAGEEAGEREAERAAEDERTVEDERAAEDERGVSRDATGADTATAEEDSSADAPTADQRPDDAAGSRGQEGEAPSPEAASTSAGESPSADREGVEPEAASGGATKRRPPGESGEGKPYLETLPQGHWADLLVMEWLEFLVEEGGTQAATRALEYYERIGWIDGGVTEELERYLAGFEGDGDGALSIDHHRRSLSYVDQLGDGDVSVERLL",
+  "full_length": false,
+  "cluster_size": 1,
+  "biomes": [
+    {
+      "count": 1,
+      "id": 132,
+      "name": "root:Environmental:Aquatic:Marine"
+    }
+  ],
+  "pfam_annotations": [
+    {
+      "accession": "PF04659",
+      "name": "Archaeal flagella protein ",
+      "clan": null,
+      "evalue": 1.1301790139316117e-22,
+      "bit_score": 87.55205535888672,
+      "hmm_start": 2,
+      "hmm_end": 95,
+      "env_start": 325,
+      "env_end": 412
+    }
+  ],
+  "study_assembly_contigs": [
+    {
+      "study_accession": "ERP108403",
+      "assembly_accession": "ERZ534239",
+      "contig_accession": "MGYC000564781877",
+      "contig_name": "ENA-OSOD01046483-OSOD01046483.1-marine-metagenome-genome-assembly--contig:-NODE-46483-length-2198-cov-1.824140",
+      "start": 931,
+      "end": 2196,
+      "strand": "-"
+    }
+  ]
+}
